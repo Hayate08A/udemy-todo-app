@@ -4,8 +4,8 @@ import type { Express, Request, Response } from 'express';
 const app: Express = express();
 const PORT = 8080;
 
-app.get('/allToDos', (req: Request, res: Response) => {
-  return res.send('ToDos');
+app.get('/allTodos', (req: Request, res: Response) => {
+  return res.send('Todos');
 });
 
 app.listen(PORT, () => {
