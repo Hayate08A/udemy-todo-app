@@ -24,6 +24,19 @@ app.post('/createTodo', async (req: Request, res: Response) => {
   return res.json(createTodo);
 });
 
+app.put('/editTodo/:id', async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const { title, isCompleted } = req.body;
+  const editTodo = await prisma.todo.update({
+    where: { id },
+    data: {
+      title,
+      isCompleted,
+    },
+  });
+  return res.json(editTodo);
+});
+
 app.listen(PORT, () => {
   console.log('server is running 🚀');
   console.log(`localhost:${PORT}`);
