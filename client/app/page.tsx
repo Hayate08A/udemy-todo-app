@@ -5,6 +5,9 @@ import Todo from './components/Todo';
 import useSWR from 'swr';
 import { TTodo } from './types';
 import { useRef } from 'react';
+import { useRouter } from 'next/navigation';
+
+const API_BASE_URL = 'http://localhost:8080';
 
 async function fetcher(key: string) {
   return fetch(key).then((res) => res.json());
@@ -13,15 +16,21 @@ async function fetcher(key: string) {
 export default function Home() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { data, isLoading, error } = useSWR(
-    'http://localhost:8080/allTodos',
+    `${API_BASE_URL}/allTodos`,
     fetcher
   );
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (inputRef.current) {
-      console.log(inputRef.current.value);
-    }
+
+    const res = fetch(`${API_BASE_URL}/createTodo`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: inputRef.current?.value,
+        isCompleted: false,
+      }),
+    });
   };
 
   return (
