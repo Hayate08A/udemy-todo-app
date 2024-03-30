@@ -15,15 +15,15 @@ async function fetcher(key: string) {
 
 export default function Home() {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { data, isLoading, error } = useSWR(
+  const { data, isLoading, error, mutate } = useSWR(
     `${API_BASE_URL}/allTodos`,
     fetcher
   );
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const res = fetch(`${API_BASE_URL}/createTodo`, {
+    const res = await fetch(`${API_BASE_URL}/createTodo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -31,6 +31,11 @@ export default function Home() {
         isCompleted: false,
       }),
     });
+    if (res.ok) {
+      const newTodo = await res.json();
+      mutate([...data, newTodo]);
+      inputRef.current!.value = ''; // ! = 存在する前提
+    }
   };
 
   return (
