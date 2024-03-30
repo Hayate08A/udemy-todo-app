@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TTodo } from '../types';
 
 type TTodoProps = {
@@ -6,7 +6,12 @@ type TTodoProps = {
 };
 
 function Todo({ todo }: TTodoProps) {
-  console.log(`🚀 ~ todo:`, todo);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editedTitle, setEditedTitle] = useState<string>(todo.title);
+
+  const handleEdit = () => {
+    setIsEditing(!isEditing);
+  };
 
   return (
     <div>
@@ -21,12 +26,24 @@ function Todo({ todo }: TTodoProps) {
           border-gray-300 rounded"
             />
             <label className="ml-3 block text-gray-900">
-              <span className="text-lg font-medium mr-2">{todo.title}</span>
+              {isEditing ? (
+                <input
+                  type="text"
+                  className="border rounded py-1 px-2"
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                />
+              ) : (
+                <span className="text-lg font-medium mr-2">{todo.title}</span>
+              )}
             </label>
           </div>
           <div className="flex items-center space-x-2">
-            <button className="duration-150 bg-green-600 hover:bg-green-700 text-white font-medium py-1 px-2 rounded">
-              ✒
+            <button
+              className="duration-150 bg-green-600 hover:bg-green-700 text-white font-medium py-1 px-2 rounded"
+              onClick={handleEdit}
+            >
+              {isEditing ? 'Save' : '✒'}
             </button>
             <button className="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 rounded">
               ✖
