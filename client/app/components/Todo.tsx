@@ -1,16 +1,43 @@
 import React, { useState } from 'react';
 import { TTodo } from '../types';
+import useSWR from 'swr';
+
+const API_BASE_URL = 'http://localhost:8080';
 
 type TTodoProps = {
   todo: TTodo;
 };
 
+async function fetcher(key: string) {
+  return fetch(key).then((res) => res.json());
+}
+
 function Todo({ todo }: TTodoProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(todo.title);
 
-  const handleEdit = () => {
+  const { data, isLoading, error, mutate } = useSWR(
+    `${API_BASE_URL}/allTodos`,
+    fetcher
+  );
+
+  const handleEdit = async () => {
     setIsEditing(!isEditing);
+    if (isEditing) {
+      const res = await fetch(`${API_BASE_URL}/editTodo/${todo.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: editedTitle,
+        }),
+      });
+
+      if (res.ok) {
+        const editedTodo = await res.json();
+        mutate([...data, editedTodo]);
+        setEditedTitle('');
+      }
+    }
   };
 
   return (
