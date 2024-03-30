@@ -31,6 +31,7 @@ export default function Home() {
         isCompleted: false,
       }),
     });
+
     if (res.ok) {
       const newTodo = await res.json();
       mutate([...data, newTodo]);
