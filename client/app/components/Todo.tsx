@@ -1,6 +1,13 @@
 import React from 'react';
+import { TTodo } from '../types';
 
-function Todo() {
+type TTodoProps = {
+  todo: TTodo;
+};
+
+function Todo({ todo }: TTodoProps) {
+  console.log(`🚀 ~ todo:`, todo);
+
   return (
     <div>
       <li className="py-4">
@@ -14,7 +21,7 @@ function Todo() {
           border-gray-300 rounded"
             />
             <label className="ml-3 block text-gray-900">
-              <span className="text-lg font-medium mr-2"> 散歩 </span>
+              <span className="text-lg font-medium mr-2">{todo.title}</span>
             </label>
           </div>
           <div className="flex items-center space-x-2">
