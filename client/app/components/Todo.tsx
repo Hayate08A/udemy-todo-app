@@ -34,9 +34,23 @@ function Todo({ todo }: TTodoProps) {
 
       if (res.ok) {
         const editedTodo = await res.json();
-        mutate([...data, editedTodo]);
-        setEditedTitle('');
+        const updatedTodo = data.map((todo: TTodo) =>
+          todo.id === editedTodo.id ? editedTodo : todo
+        );
+        mutate(updatedTodo);
       }
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    const res = await fetch(`${API_BASE_URL}/deleteTodo/${todo.id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (res.ok) {
+      const updatedTodo = data.filter((todo: TTodo) => todo.id !== id);
+      mutate(updatedTodo);
     }
   };
 
@@ -72,7 +86,10 @@ function Todo({ todo }: TTodoProps) {
             >
               {isEditing ? 'Save' : '✒'}
             </button>
-            <button className="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 rounded">
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 rounded"
+              onClick={() => handleDelete(data.id)}
+            >
               ✖
             </button>
           </div>
