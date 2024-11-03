@@ -27,9 +27,7 @@ function Todo({ todo }: TTodoProps) {
       const res = await fetch(`${API_BASE_URL}/editTodo/${todo.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: editedTitle,
-        }),
+        body: JSON.stringify({ title: editedTitle }),
       });
 
       if (res.ok) {
@@ -54,6 +52,22 @@ function Todo({ todo }: TTodoProps) {
     }
   };
 
+  const toggleTodoCompletion = async (id: number, isCompleted: boolean) => {
+    const res = await fetch(`${API_BASE_URL}/editTodo/${todo.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ isCompleted: !isCompleted }),
+    });
+
+    if (res.ok) {
+      const editedTodo = await res.json();
+      const updatedTodo = data.map((todo: TTodo) =>
+        todo.id === editedTodo.id ? editedTodo : todo
+      );
+      mutate(updatedTodo);
+    }
+  };
+
   return (
     <div>
       <li className="py-4">
@@ -65,6 +79,7 @@ function Todo({ todo }: TTodoProps) {
               type="checkbox"
               className="h-4 w-4 text-teal-600 focus:ring-teal-500
           border-gray-300 rounded"
+              onChange={() => toggleTodoCompletion(todo.id, todo.isCompleted)}
             />
             <label className="ml-3 block text-gray-900">
               {isEditing ? (
@@ -75,11 +90,17 @@ function Todo({ todo }: TTodoProps) {
                   onChange={(e) => setEditedTitle(e.target.value)}
                 />
               ) : (
-                <span className="text-lg font-medium mr-2">{todo.title}</span>
+                <span
+                  className={`text-lg font-medium mr-2  ${
+                    todo.isCompleted ? 'line-through' : ''
+                  }`}
+                >
+                  {todo.title}
+                </span>
               )}
             </label>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className={`flex items-center space-x-2`}>
             <button
               className="duration-150 bg-green-600 hover:bg-green-700 text-white font-medium py-1 px-2 rounded"
               onClick={handleEdit}
