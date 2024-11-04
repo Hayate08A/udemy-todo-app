@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { TTodo } from '../types';
 import useSWR from 'swr';
-
-const API_BASE_URL = 'http://localhost:8080';
+import { API_URL } from '@/constants/url';
 
 type TTodoProps = {
   todo: TTodo;
@@ -17,14 +16,14 @@ function Todo({ todo }: TTodoProps) {
   const [editedTitle, setEditedTitle] = useState<string>(todo.title);
 
   const { data, isLoading, error, mutate } = useSWR(
-    `${API_BASE_URL}/allTodos`,
+    `${API_URL}/allTodos`,
     fetcher
   );
 
   const handleEdit = async () => {
     setIsEditing(!isEditing);
     if (isEditing) {
-      const res = await fetch(`${API_BASE_URL}/editTodo/${todo.id}`, {
+      const res = await fetch(`${API_URL}/editTodo/${todo.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: editedTitle }),
@@ -41,7 +40,7 @@ function Todo({ todo }: TTodoProps) {
   };
 
   const handleDelete = async (id: number) => {
-    const res = await fetch(`${API_BASE_URL}/deleteTodo/${todo.id}`, {
+    const res = await fetch(`${API_URL}/deleteTodo/${todo.id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -53,7 +52,7 @@ function Todo({ todo }: TTodoProps) {
   };
 
   const toggleTodoCompletion = async (id: number, isCompleted: boolean) => {
-    const res = await fetch(`${API_BASE_URL}/editTodo/${todo.id}`, {
+    const res = await fetch(`${API_URL}/editTodo/${todo.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ isCompleted: !isCompleted }),

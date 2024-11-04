@@ -6,8 +6,7 @@ import useSWR from 'swr';
 import { TTodo } from './types';
 import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
-
-const API_BASE_URL = 'http://localhost:8080';
+import { API_URL } from '@/constants/url';
 
 async function fetcher(key: string) {
   return fetch(key).then((res) => res.json());
@@ -16,14 +15,14 @@ async function fetcher(key: string) {
 export default function Home() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { data, isLoading, error, mutate } = useSWR(
-    `${API_BASE_URL}/allTodos`,
+    `${API_URL}/allTodos`,
     fetcher
   );
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const res = await fetch(`${API_BASE_URL}/createTodo`, {
+    const res = await fetch(`${API_URL}/createTodo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
