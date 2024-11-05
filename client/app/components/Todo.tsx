@@ -2,23 +2,16 @@ import React, { useState } from 'react';
 import { TTodo } from '../types';
 import useSWR from 'swr';
 import { API_URL } from '@/constants/url';
+import { useTodos } from '../hooks/useTodos';
 
 type TTodoProps = {
   todo: TTodo;
 };
 
-async function fetcher(key: string) {
-  return fetch(key).then((res) => res.json());
-}
-
 function Todo({ todo }: TTodoProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(todo.title);
-
-  const { data, isLoading, error, mutate } = useSWR(
-    `${API_URL}/allTodos`,
-    fetcher
-  );
+  const { todos, isLoading, error, mutate } = useTodos();
 
   const handleEdit = async () => {
     setIsEditing(!isEditing);
@@ -31,7 +24,7 @@ function Todo({ todo }: TTodoProps) {
 
       if (res.ok) {
         const editedTodo = await res.json();
-        const updatedTodo = data.map((todo: TTodo) =>
+        const updatedTodo = todos.map((todo: TTodo) =>
           todo.id === editedTodo.id ? editedTodo : todo
         );
         mutate(updatedTodo);
@@ -46,7 +39,7 @@ function Todo({ todo }: TTodoProps) {
     });
 
     if (res.ok) {
-      const updatedTodo = data.filter((todo: TTodo) => todo.id !== id);
+      const updatedTodo = todos.filter((todo: TTodo) => todo.id !== id);
       mutate(updatedTodo);
     }
   };
@@ -60,7 +53,7 @@ function Todo({ todo }: TTodoProps) {
 
     if (res.ok) {
       const editedTodo = await res.json();
-      const updatedTodo = data.map((todo: TTodo) =>
+      const updatedTodo = todos.map((todo: TTodo) =>
         todo.id === editedTodo.id ? editedTodo : todo
       );
       mutate(updatedTodo);
@@ -108,7 +101,7 @@ function Todo({ todo }: TTodoProps) {
             </button>
             <button
               className="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 rounded"
-              onClick={() => handleDelete(data.id)}
+              onClick={() => handleDelete(todos.id)}
             >
               ✖
             </button>
