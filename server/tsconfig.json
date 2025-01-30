@@ -2,11 +2,9 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
-    "outDir": "dist",
-    "rootDir": "src",
+    "outDir": "./dist", // ✅ コンパイル結果の出力先
+    "rootDir": "./src",
     "strict": true,
-    "esModuleInterop": true, // ✅ これを追加・修正！
-    "resolveJsonModule": true,
-    "skipLibCheck": true
+    "esModuleInterop": true
   }
 }
