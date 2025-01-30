@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "dist", // ✅ `dist/` にビルド
+    "outDir": "dist", // ✅ `dist/` にコンパイルする
     "module": "CommonJS",
     "target": "ES6",
     "strict": true

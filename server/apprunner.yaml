@@ -1,13 +1,14 @@
 version: 1
-runtime: nodejs18 # ✅ App Runner の Node.js のバージョンを指定
+runtime: nodejs18 # ✅ App Runner の Node.js のバージョン
 build:
   commands:
     pre_build:
+      - cd server # ✅ `server/` ディレクトリに移動
       - npm install # ✅ 依存関係をインストール
-      - npx prisma generate # ✅ Prisma を使う場合はモデルを生成
+      - npx prisma generate # ✅ Prisma のスキーマを生成
     build:
-      - npm run build # ✅ TypeScript のコンパイル
+      - npm run build # ✅ TypeScript をコンパイル
 run:
-  command: "node dist/index.js" # ✅ TypeScript のコンパイル後の実行ファイルを指定
+  command: "node dist/index.js" # ✅ `dist/index.js` を実行
   network:
     port: 3000
