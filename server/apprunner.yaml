@@ -1,0 +1,12 @@
+version: 1
+runtime: nodejs20
+build:
+  commands:
+    pre_build:
+      - cd server && npm install # ✅ `server` 内で npm install を実行
+    build:
+      - cd server && npm run build
+run:
+  command: "npm start"
+  network:
+    port: 3000
