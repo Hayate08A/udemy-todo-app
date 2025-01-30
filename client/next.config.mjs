@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  output: "export", // ✅ `standalone` ではなく `export` にする
   trailingSlash: true, // 末尾のスラッシュを許可
 };
 
