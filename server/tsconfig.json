@@ -2,9 +2,11 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
-    "outDir": "./dist", // ✅ コンパイル結果の出力先
-    "rootDir": "./src",
+    "outDir": "dist",
+    "rootDir": "src",
     "strict": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true, // ✅ これを追加する
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"]
 }
