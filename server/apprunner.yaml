@@ -1,10 +1,10 @@
 version: 1
-runtime: nodejs18 # ✅ App Runner の Node.js のバージョン
+runtime: nodejs18
 build:
   commands:
-    - cd server && npm install # ✅ 依存関係をインストール
-    - npm run build # ✅ TypeScript のビルド
+    - npm install # ✅ 依存関係をインストール
+    - npm run build # ✅ TypeScript をコンパイル
 run:
   command: "npm start"
   network:
-    port: 3000
+    port: 8080
